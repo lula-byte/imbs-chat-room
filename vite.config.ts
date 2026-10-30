@@ -1,39 +1,4 @@
-import tailwindcss from '@tailwindcss/vite';
-
-import react from '@vitejs/plugin-react';
-
-import path from 'path';
-
-import {defineConfig} from 'vite';
-
-
-export default defineConfig(() => {
-
-  return {
-
-    // PENTING untuk GitHub Pages project: situs ini tinggal di
-    // https://lula-byte.github.io/ruang-publik-virtual-smp-it-imm/
-    // (bukan di root domain), jadi semua aset harus memakai awalan ini.
-    // Tanpa baris ini, hasil build mengarah ke /assets/... dan tidak ketemu.
-    base: '/ruang-publik-virtual-smp-it-imm/',
-
-    plugins: [react(), tailwindcss()],
-
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-
-    server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
-      hmr: process.env.DISABLE_HMR !== 'true',
-
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
-    },
-
-  };
-
-});
+export default defineConfig({
+  base: '/imbs-chat-room/',
+  // ...isi lain tetap
+})
