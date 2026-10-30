@@ -1,0 +1,8 @@
+{
+  "name": "Chat Kelas IMBS",
+  "description": "Aplikasi Chat Kelas resmi SMP IT Insan Mulia Maos dengan panel moderasi guru, manajemen akun siswa massal, dan database spreadsheet terintegrasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

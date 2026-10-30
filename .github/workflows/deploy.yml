@@ -1,0 +1,65 @@
+# Deploy otomatis ke GitHub Pages setiap push ke branch main.
+# Cara pakai:
+#   1. Simpan file ini di repo, di path: .github/workflows/deploy.yml
+#      (kalau sudah ada file lama di path itu, ganti seluruh isinya dengan file ini)
+#   2. Di repo Settings -> Pages -> Build and deployment -> Source: pilih "GitHub Actions"
+#      (bukan "Deploy from a branch").
+#   3. Push perubahan apa pun ke main, lalu tunggu workflow selesai di tab Actions.
+# Workflow ini menjalankan "npm run build" (vite build) dan menerbitkan
+# folder dist/ ke GitHub Pages. Tanpa ini, Pages hanya menayangkan file
+# mentah (index.html yang mengarah ke /src/main.tsx) sehingga halaman blank.
+#
+# v2 (2026-10-30): Node 22 + npm install --legacy-peer-deps.
+# Alasan: run #1 gagal cepat di step Install dependencies (exit code 1,
+# job hanya 18 detik). Gagal secepat itu ciri khas konflik peer dependency
+# saat npm me-resolve versi — bukan file yang hilang atau jaringan.
+# --legacy-peer-deps membuat npm mengabaikan konflik peer dan tetap install.
+# Repo ini tidak punya package-lock.json, jadi pakai npm install (bukan npm ci).
+name: Deploy ke GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload hasil build
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "dist"
+
+      - name: Deploy ke GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
