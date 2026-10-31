@@ -57,20 +57,6 @@ export default function App() {
     handleRefresh();
   };
 
-  const handleSwitchUser = (username: string) => {
-    const users = db.getUsers();
-    const target = users.find(u => u.username === username);
-    if (target) {
-      db.login(target.username, target.passwordHash);
-      setCurrentUser(target);
-      if (target.role !== 'guru' && (activeTab === 'teacher_panel' || activeTab === 'database')) {
-        setActiveTab('chat');
-      }
-      sounds.playSend();
-      handleRefresh();
-    }
-  };
-
   const handleLogout = () => {
     db.logout();
     setCurrentUser(null);
@@ -101,7 +87,6 @@ export default function App() {
         onOpenLogin={() => setIsLoginOpen(true)}
         onOpenProfile={() => setIsProfileOpen(true)}
         onLogout={handleLogout}
-        onSwitchUser={handleSwitchUser}
         groupName={settings.groupName}
       />
 

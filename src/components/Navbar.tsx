@@ -9,9 +9,6 @@ import {
   LogOut, 
   Volume2, 
   VolumeX, 
-  ChevronDown,
-  Sparkles,
-  RefreshCw,
   ExternalLink
 } from 'lucide-react';
 import { sounds } from '../utils/audio';
@@ -23,7 +20,6 @@ interface NavbarProps {
   onOpenLogin: () => void;
   onOpenProfile: () => void;
   onLogout: () => void;
-  onSwitchUser: (username: string) => void;
   groupName: string;
 }
 
@@ -34,10 +30,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenLogin,
   onOpenProfile,
   onLogout,
-  onSwitchUser,
   groupName
 }) => {
-  const [showSwitchMenu, setShowSwitchMenu] = useState(false);
   const [soundActive, setSoundActive] = useState(true);
 
   const toggleSound = () => {
@@ -139,114 +133,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 3: Actions & User Menu */}
         <div className="flex items-center gap-2 shrink-0">
-          
-          {/* Quick Demo Account Switcher Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowSwitchMenu(!showSwitchMenu)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
-              title="Ganti akun untuk mencoba peran Guru atau Siswa"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
-              <span className="hidden lg:inline">Peran:</span>
-              <span className="font-semibold text-slate-900">
-                {currentUser ? (isGuru ? 'Guru' : currentUser.displayName || 'Siswa') : 'Tamu'}
-              </span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-            </button>
-
-            {showSwitchMenu && (
-              <>
-                <div 
-                  className="fixed inset-0 z-50" 
-                  onClick={() => setShowSwitchMenu(false)} 
-                />
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-50 text-xs">
-                  <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Beralih Akun Uji Coba
-                  </div>
-                  <button
-                    onClick={() => {
-                      onSwitchUser('guru');
-                      setShowSwitchMenu(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 ${
-                      currentUser?.username === 'guru' ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">👨‍🏫</span>
-                      <div>
-                        <div className="font-semibold">Ustadz Ahmad (Guru)</div>
-                        <div className="text-[10px] text-slate-400">username: guru · Akses Penuh</div>
-                      </div>
-                    </div>
-                    {currentUser?.username === 'guru' && <span className="text-emerald-600 font-bold">✓</span>}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      onSwitchUser('siswa01');
-                      setShowSwitchMenu(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 ${
-                      currentUser?.username === 'siswa01' ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">👦</span>
-                      <div>
-                        <div className="font-semibold">Ahmad Zaki (Siswa 01)</div>
-                        <div className="text-[10px] text-slate-400">username: siswa01 · Siswa Aktif</div>
-                      </div>
-                    </div>
-                    {currentUser?.username === 'siswa01' && <span className="text-emerald-600 font-bold">✓</span>}
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      onSwitchUser('siswa02');
-                      setShowSwitchMenu(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 ${
-                      currentUser?.username === 'siswa02' ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">🧕</span>
-                      <div>
-                        <div className="font-semibold">Fatimah Azzahra (Siswa 02)</div>
-                        <div className="text-[10px] text-slate-400">username: siswa02 · Santriwati</div>
-                      </div>
-                    </div>
-                    {currentUser?.username === 'siswa02' && <span className="text-emerald-600 font-bold">✓</span>}
-                  </button>
-
-                  <div className="my-1 border-t border-slate-100"></div>
-
-                  <button
-                    onClick={() => {
-                      onLogout();
-                      setShowSwitchMenu(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 ${
-                      !currentUser ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">👀</span>
-                      <div>
-                        <div className="font-semibold">Mode Tamu (Read-Only)</div>
-                        <div className="text-[10px] text-slate-400">Hanya membaca pesan</div>
-                      </div>
-                    </div>
-                    {!currentUser && <span className="text-emerald-600 font-bold">✓</span>}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-
           {/* Sound Toggle */}
           <button
             onClick={toggleSound}
